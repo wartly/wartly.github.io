@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kwalla Translator</title>
+</head>
+<body>
+    <style>
+        body {
+            font-family: sans-serif;
+            font-size: 12px;
+            margin: 20px;
+        }
+        textarea[readonly] {
+            border: 1px solid rgb(82, 112, 222);
+            background-color: #bcd9ff;
+        }
+        textarea {
+            border-radius:10px;
+            padding:10px;
+            border: 1px solid gray;
+            background-color: #f2f2f2;
+        }
+    </style>
+    <h1>Kwalla Translator</h1>
+    <h3>Kwalla Translator is a free and open source tool used to translate text to Kwalla or Kwalla to text.</h3>
+    <p>Kwalla is a language spoken by the kwallas of kwalland. It consists of colons and no colons.</p>
+    <p>You can tell a language is in kwalla as all kwalla text begins and ends with a pipe (|).</p>
+    <p><b>Input:</b></p>
+    <textarea id="input" rows="10" cols="50"></textarea><br>
+    <button id="k2t">Kwalla to Text</button><button id="t2k">Text to Kwalla</button><br>
+    <p><b>Output:</b></p>
+    <textarea id="output" rows="10" cols="50" readonly></textarea><br>
+    <button id="copyOutput">Copy Output</button>
+    <script>
+        function textToKwalla(text) {
+            return '|'+text
+                .split('')
+                .map(char => char.charCodeAt(0).toString(4).padStart(4, ':').replaceAll('0',':').replaceAll('1','‍').replaceAll('2','​').replaceAll('3','﻿')) 
+                .join('‌')+'|';
+        }
+
+        function kwallaToText(kwalla) {
+            return kwalla
+                .split('|')[1]
+                .replaceAll(':','0')
+                .replaceAll('‍','1') //zero-width joiner
+                .replaceAll('​','2') //zero-width spaces
+                .replaceAll('﻿','3') //zero-width no break space
+                .split('‌')
+                .map(bin => String.fromCharCode(parseInt(bin, 4)))
+                .join('');
+        }
+        document.getElementById('t2k').addEventListener('click', () => {
+            const input = document.getElementById('input').value;
+            const output = textToKwalla(input);
+            document.getElementById('output').value = output;
+        });
+        document.getElementById('k2t').addEventListener('click', () => {
+            const input = document.getElementById('input').value;
+            const output = kwallaToText(input);
+            document.getElementById('output').value = output;
+        });
+        document.getElementById('copyOutput').addEventListener('click', () => {
+            const output = document.getElementById('output');
+            output.select();
+            output.setSelectionRange(0, 99999); // For mobile devices
+            document.execCommand('copy');
+        });
+    </script>
+</body>
+</html>
