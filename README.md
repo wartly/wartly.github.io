@@ -1,2 +1,3 @@
 # wartly.github.io
-web
+WARTLY is a strategist
+WARTLY is still
