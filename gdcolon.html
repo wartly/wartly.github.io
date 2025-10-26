@@ -13,8 +13,12 @@ but.addEventListener("click",()=>{
   if(input.value=='yes'){
     r.textContent='kr...';
     setTimeout(()=>{
-      r.textContent='k modly r.'
+      r.textContent='k modly r.';
     },1000);
+    setTimeout(()=>{
+      r.textContent='You are officially a GD Colon fan.';
+      localStorage.setItem('colonFan',true);
+    },2000);
   }
 });
 </script>
