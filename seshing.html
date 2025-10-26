@@ -1,12 +1,30 @@
 <style>
+@font-face{
+    font-family:'GdTitle';
+    src: url('/pusab.otf') format('opentype');
+}
+h1 {
+    color: white;
+    -webkit-text-stroke: 1px black;
+    font-weight: 900;
+    font-family:'GdTitle';
+}
 body {
   background-size: cover;
   background-attachment: fixed;
   background-image: url("/gdbg.jpg");
   margin: 0;
+  align-content: center;
 }
 .menu{
   background:#995533;
+  width: 70%;
+  border: 3px solid black;
+  outline: 2px solid white;
+  border-radius: 13px;
+  padding: 20px;
+  margin: auto calc(15% - 20px);
+  box-shadow: 0 3px inset #ffaa55, 0 -3px inset #553311;
 }
 </style>
 <div class="menu">
