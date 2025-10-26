@@ -1,5 +1,5 @@
 <style>
-@font-face{
+    @font-face{
     font-family:'gd-title';
     src:url('/pusab.otf');
 }
@@ -9,6 +9,10 @@ h1 {
     font-family:'gd-title';
     margin:0;
 }
+
+.menu.closed {
+    bottom: 100vh;
+}
 body {
   background-size: cover;
   background-attachment: fixed;
@@ -17,6 +21,10 @@ body {
   align-content: center;
 }
 .menu{
+  transition-duration: 1s;
+  transition-timing-function: cubic-bezier(0.5, -0.5, 0.2, 1.4);
+  bottom: 0;
+  position: relative;
   background:#995533;
   width: 70%;
   border: 3px solid black;
@@ -28,5 +36,9 @@ body {
 }
 </style>
 <div class="menu">
-  <h1>GD strategist</h1>
+  <h1>Are you a colon fan?</h1>
+  <p>Only true colon fans can get a good sesh. Prove you are a true fan:</p>
+  <input type="text" placeholder="enter GD Colon's secret password" id="pass">
+  <button id="submit">Submit</button>
+  
 </div>
