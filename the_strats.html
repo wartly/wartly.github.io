@@ -1,2 +1,32 @@
+<style>
+html {
+    background:linear-gradient(#ff00ff,#00ff00,#ff00ff);
+    height:100px;
+    width:100vw;
+    position:absolute;
+    animation: color 3s ease-in-out infinite;
+}
+body{
+    position:absolute;
+}
+body *{
+    mix-blend-mode:difference;
+    color:white;
+}
+@keyframes color{
+    from{
+        height:30px;
+    }50%{
+        height:100px;
+    }to{
+        height:30px;
+    }
+}
+
+img {
+    filter: invert(1);
+}
+</style>
 <h1>This is a strategic place...</h1>
 <p>Many strats lie within this place.</p>
+<img src="/kwalla.png">
