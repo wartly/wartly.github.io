@@ -17,9 +17,10 @@ h1 {
     bottom: 100vh;
 }
 body {
+  overflow:hidden;
   background-size: cover;
   background-attachment: fixed;
-  background-image: url("/gdbg.jpg");
+  background-image: url("gdbg.jpg");
   margin: 0;
   align-content: center;
 }
@@ -101,11 +102,150 @@ button:active{
       transform: scale(1.1);
   }
 }
+.menu.shake {
+    animation: shake 0.3s linear;
+}
+@keyframes shake{
+    0%{
+        left:0;
+    }20%{
+        left:30px;
+    }50%{
+        left:-20px;
+    }70%{
+        left:10px;
+    }90%{
+        left:-5px;
+    }100%{
+        left:0;
+    }
+}
+.floor{
+    opacity:0;
+    transition-duration: 1s;
+    transition-delay:1s;
+    width: 100vw;
+    height: 250px;
+    position: absolute;
+    bottom: 0;
+    z-index: 2;
+    background: url(floor.png);
+    background-size: 300px;
+    background-position-x: 0;
+    border-top: 2px solid transparent;
+    border-image: linear-gradient(90deg, #2269d7, white, #2269d7) 1;
+    box-shadow: 0 -10px 100px 0px inset #000000aa;
+}
+.floor.shown{
+    opacity:1;
+}
+.player{
+    width:55px;
+    height:50px;
+}
 </style>
-<div class="menu">
+<div class="menu closed" id="passMenu">
   <h1>Are you a colon fan?</h1>
   <p>Only true colon fans can get a good sesh. Prove you are a true fan:</p>
   <input type="text" placeholder="enter GD Colon's secret password" id="pass">
   <button id="submit">Submit</button>
-  
 </div>
+<div class="floor"></div>
+<script>
+    const passMenu = document.getElementById('passMenu');
+    window.onload=() => {
+        passMenu.classList.remove('closed');
+    };
+    const pass = document.getElementById('pass');
+    const submit = document.getElementById('submit');
+    const floor = document.querySelector('.floor');
+    const word ='#GDCOLONHASSTRATS#';
+    let player;
+    submit.addEventListener('mouseup', () => {
+        if (pass.value === word) {
+            passMenu.classList.add('closed');   
+            floor.classList.add('shown');
+            setTimeout(() => {
+                passMenu.remove();
+                floor.style.transitionDuration = '0s';
+                floor.style.transitionDelay = '0s';
+                player = document.createElement('img');
+                player.src = 'kwalla.png';
+                player.classList.add('player');
+                player.style.position = 'absolute';
+                player.style.left = 'calc(50% - 27px)';
+                player.style.bottom = 'calc(50% - 25px)';
+                gameLoop();
+                document.body.appendChild(player);
+            }, 2000);
+        }else{
+            pass.value = '';
+            passMenu.classList.add('shake');
+            setTimeout(() => {
+                passMenu.classList.remove('shake');
+            }, 500);
+        }
+    });
+    let playerX = (window.innerWidth / 2) - 27;
+    let playerY = (window.innerHeight / 2) - 25;
+    let playerDx = 0;
+    let playerDy = 0;
+    let playerSpeed = 5;
+    let isJumping = false;
+    let keys = {};
+    let rotate = 0;
+    let playerAngle = 0;
+    window.addEventListener('keydown', (e) => {
+        keys[e.key] = true;
+    });
+    window.addEventListener('keyup', (e) => {
+        keys[e.key] = false;
+    });
+    floor.style.backgroundPositionX = '0px';
+    function gameLoop(){
+        playerAngle += rotate;
+        playerX += playerDx;
+        playerY += playerDy;
+        playerDx *= 0.8;
+        playerDy -= 1;
+                //console.log(playerDx);
+
+        if (keys['ArrowUp'] || keys['w']) {
+            if(!isJumping){
+                if(playerDx>1)rotate=90/32;
+                if(playerDx>3)rotate=180/32;
+                if(playerDx<-1)rotate=-90/32;
+                if(playerDx<-3)rotate=-180/32;
+                isJumping = true;
+                playerDy = 15;
+            }
+        }if(keys['ArrowLeft'] || keys['a']){
+            if(isJumping && rotate==0)rotate=-90/(playerDy+17);
+            playerDx = -playerSpeed;
+        }if(keys['ArrowRight'] || keys['d']){
+            if(isJumping && rotate==0)rotate=90/(playerDy+17);
+            
+            playerDx = playerSpeed;
+        }
+        if (playerX < 350) {
+            //console.log(playerDx);
+            floor.style.backgroundPositionX = `${parseInt(floor.style.backgroundPositionX.split('px')[0])-playerDx}px`;
+            playerX = 350;
+        }else if (playerX > window.innerWidth - 350) {
+            floor.style.backgroundPositionX = `${parseInt(floor.style.backgroundPositionX.split('px')[0])-playerDx}px`;
+            playerX = window.innerWidth - 350;
+        }
+        if (playerY < 250) {
+            rotate=0;
+            isJumping = false;
+            playerY = 250;
+            playerDy = 0;
+            playerAngle = Math.round(playerAngle / 90) * 90;
+
+        }
+        player.style.left = `${playerX}px`;
+        player.style.bottom = `${playerY}px`;
+        player.style.transform = `rotate(${playerAngle}deg)`;
+        requestAnimationFrame(gameLoop);
+    }
+</script>
