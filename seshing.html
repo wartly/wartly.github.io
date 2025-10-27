@@ -8,6 +8,9 @@ h1 {
     -webkit-text-stroke: 0.5px black;
     font-family:'gd-title';
     margin:0;
+    text-align: center;
+    font-size: 40px;
+    text-shadow: 3px 3px #00000044;
 }
 
 .menu.closed {
@@ -33,6 +36,70 @@ body {
   padding: 20px;
   margin: auto calc(15% - 20px);
   box-shadow: 0 3px inset #ffaa55, 0 -3px inset #553311;
+  text-align: center;
+}
+    p {
+    color: white;
+    font-family: 'helvetica', sans-serif;
+    font-size: 14px;
+    text-align: center;
+}
+
+input[type="text"] {
+    width: 70%;
+    margin: 10px 15%;
+    padding: 10px 20px;
+    border-radius: 10px;
+    background: #5C331F;
+    border: 0;
+    color: white;
+    text-align: CENTER;
+    font-family: 'helvetica', sans-serif;
+    font-size: 14px;
+}
+
+input[type="text"]::placeholder {
+    color: #ffffffaa;
+    font-family: 'helvetica', sans-serif;
+}
+
+button {
+    border-radius: 10px;
+    padding: 6px;
+    font-family: 'gd-title';
+    min-width: 150px;
+    color: white;
+    font-size: 25px;
+    -webkit-text-stroke: 0.8px black;
+    background: #7ADE2D;
+    text-shadow: 3px 3px #00000033;
+    border: 2px solid black;
+    outline: 2px solid white;
+    box-shadow: 2px 2px inset #C6F249, -2px -2px inset #49851B;
+    margin: 10px;
+}
+
+input[type="text"]:focus {
+    outline: 0;
+    border: 0;
+}
+button:active{
+    transform:scale(1.1);
+    animation:0.2s bounceButton linear;
+}
+@keyframes bounceButton {
+  0% {
+      transform: scale(1);
+  }
+  50% {
+      transform: scale(1.12);
+  }
+  75% {
+      transform: scale(1.06);
+  }
+  100% {
+      transform: scale(1.1);
+  }
 }
 </style>
 <div class="menu">
