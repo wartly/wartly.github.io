@@ -6,6 +6,7 @@ li{list-style: none;font-weight:600;margin: 5vh;}
 ul{padding:0;margin-top: 10vh;}
 img{width:70px;}
 .footnote{font-size:10px;color:white;margin-top: 22vh;}
+.bomb{width:20px;height:20px;background-image:url(bomb.png);background-size:20px 20px;position:fixed;pointer-events:none;z-index:9999;}
 </style>
 <h1>Wartly</h1>
 <h3>- The ingergist -</h3>
@@ -16,3 +17,20 @@ img{width:70px;}
 </ul>
 <a href="/home"><img src="kwalla.png"></a>
 <p class="footnote">Background Image &copy; Copyright Fortnite</p>
+<script>
+  if('hasbomb' in localStorage){
+    if(localStroage.getItem('hasbomb')==true){
+      const bomb = document.createElement('div');
+      bomb.classList.add('bomb');
+      document.addEventListener('mousemove', (event) => {
+          const mouseX = event.clientX;
+          const mouseY = event.clientY;
+      
+          bomb.style.left = `${mouseX}px`;
+          bomb.style.top = `${mouseY}px`;
+      });
+      document.body.appendChild(bomb);
+
+    }
+  }
+</script>
