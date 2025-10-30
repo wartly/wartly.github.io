@@ -312,6 +312,7 @@ button:active{
                 if(gameplay.querySelector('.bomb')){
                     if(parseInt(floor.style.backgroundPositionX.split('px')[0])<-650){
                         hasbomb=true;
+                        localStorage.setItem('hasbomb',true);
                         gameplay.removeChild(bomb);
                         player.appendChild(bomb);
                     }
@@ -340,4 +341,5 @@ button:active{
         player.style.transform = `rotate(${playerAngle}deg)`;
         requestAnimationFrame(gameLoop);
     }
+
 </script>
