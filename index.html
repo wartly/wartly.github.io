@@ -13,7 +13,17 @@ ul{padding:0;margin-top: 10vh;}
 img{width:70px;}
 .footnote{font-size:10px;color:white;margin-top: 22vh;}
 .bomb{width:20px;height:20px;background-image:url(bomb.png);background-size:20px 20px;position:fixed;pointer-events:none;z-index:9999;}
+.llama {
+    width: 15%;
+    height: 45%;
+    position: absolute;
+    left: 71%;
+    top: 40%;
+    background: transparent;
+    cursor: pointer;
+}
 </style>
+<a href="/loot"><div class="llama"></div></a>
 <h1>Wartly</h1>
 <h3>- The ingergist -</h3>
 <ul>
@@ -36,7 +46,10 @@ img{width:70px;}
           bomb.style.top = `${mouseY}px`;
       });
       document.body.appendChild(bomb);
-
+      document.querySelector('.llama').addEventListener('click',(e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+      });
     }
   }
 </script>
