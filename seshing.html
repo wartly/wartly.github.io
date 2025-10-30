@@ -38,6 +38,7 @@ body {
   margin: auto calc(15% - 20px);
   box-shadow: 0 3px inset #ffaa55, 0 -3px inset #553311;
   text-align: center;
+  z-index:10;
 }
     p {
     color: white;
@@ -136,12 +137,58 @@ button:active{
     border-image: linear-gradient(90deg, #2269d7, white, #2269d7) 1;
     box-shadow: 0 -10px 100px 0px inset #000000aa;
 }
-.floor.shown{
-    opacity:1;
+.floor.shown,.gameplay.shown{
+    opacity:1 !important;
 }
 .player{
     width:55px;
     height:50px;
+    z-index:9;
+    background-image:url(kwalla.png);
+    background-size:55px 50px;
+}
+.gameplay{
+    z-index:1;
+    opacity:0;
+    transition-duration: 1s;
+    transition-delay:1s;
+    width: 100vw;
+    height: 1000px;
+    position: absolute;
+    bottom:250px;
+    left:0;
+}
+.wall{
+    position:absolute;
+    background-image:url(block.png);
+    background-size:50px 50px;
+    bottom:0;
+}
+.rattledash{
+    position:absolute;
+    background-image:url(rattledash.png);
+    background-size:60px 60px;
+    bottom:0;
+}
+.bomb{
+    position:absolute;
+    background-image:url(bomb.png);
+    background-size:30px 30px;
+    bottom:0;
+}
+.player .bomb {
+    position: relative;
+    right: 15px !important;
+    top: 10px;
+}
+.indicator{
+    position:absolute;
+    background:transparent;
+    border-radius:100%;
+    bottom:100px;
+}
+.indicator.on{
+    background:#ffffff77;
 }
 </style>
 <div class="menu closed" id="passMenu">
@@ -151,6 +198,13 @@ button:active{
   <button id="submit">Submit</button>
 </div>
 <div class="floor"></div>
+<div class="gameplay" style="left:0px;">
+    <div class="wall" style="height:250px;width:50px;left:-1000px;"></div>
+    <div class="wall" style="height:250px;width:50px;right:-1000px;"></div>
+    <div class="rattledash" style="height:60px;width:60px;right:-955px;"></div>
+    <div class="bomb" style="height:30px;width:30px;right:-400px;"></div>
+    <div class="indicator" style="height:20px;width:20px;right:-800px;"></div>
+</div>
 <script>
     const passMenu = document.getElementById('passMenu');
     window.onload=() => {
@@ -160,17 +214,22 @@ button:active{
     const submit = document.getElementById('submit');
     const floor = document.querySelector('.floor');
     const word ='#GDCOLONHASSTRATS#';
+    const gameplay = document.querySelector('.gameplay');
+    const block = 50;
     let player;
     submit.addEventListener('mouseup', () => {
         if (pass.value === word) {
             passMenu.classList.add('closed');   
             floor.classList.add('shown');
+            gameplay.classList.add('shown');
             setTimeout(() => {
                 passMenu.remove();
                 floor.style.transitionDuration = '0s';
                 floor.style.transitionDelay = '0s';
-                player = document.createElement('img');
-                player.src = 'kwalla.png';
+                gameplay.style.transitionDuration = '0s';
+                gameplay.style.transitionDelay = '0s';
+
+                player = document.createElement('div');
                 player.classList.add('player');
                 player.style.position = 'absolute';
                 player.style.left = 'calc(50% - 27px)';
@@ -202,6 +261,10 @@ button:active{
         keys[e.key] = false;
     });
     floor.style.backgroundPositionX = '0px';
+    const bomb = document.querySelector('.bomb');
+    const indicator = document.querySelector('.indicator');
+    let hasbomb = false;
+    localStorage.setItem('hasbomb', hasbomb);
     function gameLoop(){
         playerAngle += rotate;
         playerX += playerDx;
@@ -211,13 +274,21 @@ button:active{
                 //console.log(playerDx);
 
         if (keys['ArrowUp'] || keys['w']) {
-            if(!isJumping){
-                if(playerDx>1)rotate=90/32;
-                if(playerDx>3)rotate=180/32;
-                if(playerDx<-1)rotate=-90/32;
-                if(playerDx<-3)rotate=-180/32;
-                isJumping = true;
-                playerDy = 15;
+            if(hasbomb && indicator.classList.contains('on')){
+                indicator.classList.remove('on');
+                hasbomb = false;
+                localStorage.setItem('hasbomb', hasbomb);
+                player.removeChild(bomb);
+                document.body.appendChild(bomb);
+            }else{
+                if(!isJumping){
+                    if(playerDx>1)rotate=90/32;
+                    if(playerDx>3)rotate=180/32;
+                    if(playerDx<-1)rotate=-90/32;
+                    if(playerDx<-3)rotate=-180/32;
+                    isJumping = true;
+                    playerDy = 15;
+                }
             }
         }if(keys['ArrowLeft'] || keys['a']){
             if(isJumping && rotate==0)rotate=-90/(playerDy+17);
@@ -227,13 +298,34 @@ button:active{
             
             playerDx = playerSpeed;
         }
+        
         if (playerX < 350) {
             //console.log(playerDx);
-            floor.style.backgroundPositionX = `${parseInt(floor.style.backgroundPositionX.split('px')[0])-playerDx}px`;
+            floor.style.backgroundPositionX = `${(parseInt(floor.style.backgroundPositionX.split('px')[0])-playerDx)>1305?1305:(parseInt(floor.style.backgroundPositionX.split('px')[0])-playerDx)}px`;
+            gameplay.style.left = floor.style.backgroundPositionX;
+            
             playerX = 350;
         }else if (playerX > window.innerWidth - 350) {
-            floor.style.backgroundPositionX = `${parseInt(floor.style.backgroundPositionX.split('px')[0])-playerDx}px`;
-            playerX = window.innerWidth - 350;
+            floor.style.backgroundPositionX = `${(parseInt(floor.style.backgroundPositionX.split('px')[0])-playerDx)<-1250?-1250:(parseInt(floor.style.backgroundPositionX.split('px')[0])-playerDx)}px`;
+            gameplay.style.left = floor.style.backgroundPositionX;
+            if(hasbomb==false){
+                if(gameplay.querySelector('.bomb')){
+                    if(parseInt(floor.style.backgroundPositionX.split('px')[0])<-650){
+                        hasbomb=true;
+                        gameplay.removeChild(bomb);
+                        player.appendChild(bomb);
+                    }
+                }
+            }
+            
+            playerX = window.innerWidth - 350; 
+        }
+        if(hasbomb==true){
+            if(parseInt(floor.style.backgroundPositionX.split('px')[0])-playerX<-2200 && parseInt(floor.style.backgroundPositionX.split('px')[0])-playerX>-2350){
+                indicator.classList.add('on');
+            }else{
+                indicator.classList.remove('on');
+            }
         }
         if (playerY < 250) {
             rotate=0;
