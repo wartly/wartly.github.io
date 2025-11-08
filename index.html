@@ -10,7 +10,7 @@ h1{font-size:90px;}
 h1,h3{font-weight:900;}
 li{list-style: none;font-weight:600;margin: 5vh;}
 ul{padding:0;margin-top: 10vh;}
-img{width:70px;}
+img.kwalla{width:70px;}
 .footnote{font-size:10px;color:white;margin-top: 22vh;}
 .bomb{width:20px;height:20px;background-image:url(bomb.png);background-size:20px 20px;position:fixed;pointer-events:none;z-index:9999;}
 .llama {
@@ -31,7 +31,7 @@ img{width:70px;}
 <li>Geometry Dash</li>
 <li>Wartly</li>
 </ul>
-<a href="/home"><img src="kwalla.png"></a>
+<a href="/home"><img src="kwalla.png" class="kwalla"></a>
 <p class="footnote">Background Image &copy; Copyright Fortnite</p>
 <script>
   if('hasbomb' in localStorage){
@@ -39,16 +39,26 @@ img{width:70px;}
       const bomb = document.createElement('div');
       bomb.classList.add('bomb');
       document.addEventListener('mousemove', (event) => {
+        if(document.querySelector('.bomb'){
           const mouseX = event.clientX;
           const mouseY = event.clientY;
       
           bomb.style.left = `${mouseX}px`;
           bomb.style.top = `${mouseY}px`;
+        }
       });
       document.body.appendChild(bomb);
       document.querySelector('.llama').addEventListener('click',(e)=>{
         e.preventDefault();
         e.stopPropagation();
+        localStorage.setItem('hasbomb','false');
+        document.body.removeChild(bomb);
+        document.body.removeChild(document.querySelector('.llama');
+        const overlay = document.createElement('img');
+        overlay.classList.add('overlay');
+        overlay.classList.add('explode');
+        overlay.setAttribute('src','explode.png');
+        setTimeout(()=>{overlay.setAttribute('src','blackhole.png');overlay.classList.remove('explode');},2000);
       });
     }
   }
