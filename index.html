@@ -53,7 +53,7 @@ img.kwalla{width:70px;}
         e.stopPropagation();
         localStorage.setItem('hasbomb','false');
         document.body.removeChild(bomb);
-        document.body.removeChild(document.querySelector('.llama'));
+        document.body.removeChild(document.querySelector('.llama').parentElement);
         const overlay = document.createElement('img');
         overlay.classList.add('overlay');
         overlay.classList.add('explode');
