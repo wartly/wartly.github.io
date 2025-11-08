@@ -58,6 +58,7 @@ img.kwalla{width:70px;}
         overlay.classList.add('overlay');
         overlay.classList.add('explode');
         overlay.setAttribute('src','explode.png');
+        document.body.appendChild(overlay);
         setTimeout(()=>{overlay.setAttribute('src','blackhole.png');overlay.classList.remove('explode');},2000);
       });
     }
