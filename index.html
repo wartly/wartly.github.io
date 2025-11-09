@@ -71,7 +71,7 @@ img.explode {
         overlay.classList.add('explode');
         overlay.setAttribute('src','explode.png');
         document.body.appendChild(overlay);
-        setTimeout(()=>{overlay.setAttribute('src','blackhole.png');overlay.classList.remove('explode');},2000);
+        setTimeout(()=>{overlay.setAttribute('src','blackhole.png');overlay.classList.remove('explode');overlay.addEventListener('click',()=>{window.location.href='/theRealLoot'});},2000);
       });
     }
   }
