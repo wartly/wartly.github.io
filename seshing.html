@@ -192,8 +192,8 @@ button:active{
 }
 </style>
 <div class="menu closed" id="passMenu">
-  <h1>Are you a colon fan?</h1>
-  <p>Only true colon fans can get a good sesh. Prove you are a true fan:</p>
+  <h1 id="menu_head">Are you a colon fan?</h1>
+  <p id="menu_body">Only true colon fans can get a good sesh. Prove you are a true fan:</p>
   <input type="text" placeholder="enter GD Colon's secret password" id="pass">
   <button id="submit">Submit</button>
 </div>
@@ -207,13 +207,20 @@ button:active{
 </div>
 <script>
     const passMenu = document.getElementById('passMenu');
+    const menuHead = document.querySelector('#menu_head');
+    const menuBody = document.querySelector('#menu_body');
     window.onload=() => {
         passMenu.classList.remove('closed');
     };
     const pass = document.getElementById('pass');
     const submit = document.getElementById('submit');
     const floor = document.querySelector('.floor');
-    const word ='#GDCOLONHASSTRATS#';
+    let word ='#GDCOLONHASSTRATS#';
+    if(localStorage.getItem('cess')=='true'){
+        menuHead.textContent='You are CESS >:(';
+        menuBody.textContent='I do not let cess people sesh. Prove you are NOT cess by entering the secret code:';
+        word='TheRealDealPottedPlant';
+    }
     const gameplay = document.querySelector('.gameplay');
     const block = 50;
     let player;
@@ -343,3 +350,4 @@ button:active{
     }
 
 </script>
+
