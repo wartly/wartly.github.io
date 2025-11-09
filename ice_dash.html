@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Top Down Game - Smooth Movement</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ice Dash</h1>
+    <p>Get to the top to progress. Try find the hammer.</p>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <script>
+        const deathAudio = new Audio('death.wav');
+        deathAudio.volume = 1;
+        const winAudio = new Audio('level_complete.wav');
+        const victoryAudio = new Audio('victory.mp3');
+        const bgLoop = new Audio('likethat.mp3');
+        bgLoop.loop = true;
+        function playLoop() {
+            bgLoop.play();
+            document.removeEventListener('click', playLoop);
+            document.removeEventListener('keydown', playLoop);
+        }
+        document.addEventListener('click', playLoop);
+        document.addEventListener('keydown', playLoop);
+        const bgImg = new Image();
+        bgImg.src = 'grass.jpe';
+        const wallImg = new Image();
+        wallImg.src = 'red.jpg';
+        const hammerImg = new Image();
+        hammerImg.src = 'hammer.png';
+        const playerImg = new Image();
+        playerImg.src = 'kwalla.png';
+        // Get the canvas and context
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Movement configuration - feel free to adjust these values
+        const ACCELERATION = 0.5;  // How quickly the player speeds up
+        const FRICTION = 0.99;     // How quickly the player slows down (0-1)
+        const MAX_SPEED = 5;       // Maximum speed the player can move
+    // Restitution used when bouncing off canvas edges (1 = perfect, 0 = no bounce)
+    const RESTITUTION = 0.8;
+
+        // Player properties
+        const player = {
+            x: canvas.width / 2,
+            y: canvas.height  -50,
+            radius: 20,
+            dx: 0,        // Horizontal velocity
+            dy: 0,        // Vertical velocity
+            speed: 5
+        };
+
+        // Define obstacles (red rectangles)
+        const levels = [[
+            { x: 100, y: 100, width: 50, height: 200 },
+            { x: 300, y: 400, width: 200, height: 50 },
+            { x: 600, y: 150, width: 50, height: 300 },
+            { x: 400, y: 100, width: 300, height: 50 }
+        ],
+        [
+            { x: 150, y: 200, width: 100, height: 50 },
+            { x: 500, y: 300, width: 50, height: 200 },
+            { x: 250, y: 450, width: 300, height: 50 },
+            { x: 650, y: 100, width: 50, height: 300 },
+            { x: 400, y: 150, width: 300, height: 50 },
+            { x: 700, y: 400, width: 50, height: 200 },
+            { x: 0, y: 0, width: 300, height: 500}
+        ],[
+            { x: 200, y: 150, width: 400, height: 50 },
+            { x: 100, y: 300, width: 50, height: 250 },
+            { x: 600, y: 200, width: 50, height: 300 },
+            { x: 300, y: 450, width: 400, height: 50 },
+            { x: 0, y: 0, width: 50, height: 600 },
+            { x: 750, y: 0, width: 50, height: 600 },
+            { x: 0, y: 0, width: 600, height: 50 },
+        ],[
+            { x: 150, y: 100, width: 50, height: 400 },
+            { x: 600, y: 100, width: 50, height: 400 },
+            { x: 150, y: 450, width: 700, height: 50 },
+            { x: 300, y: 250, width: 200, height: 50 },
+            { x: 300, y: 250, width: 50, height: 100 },
+            { x: 450, y: 250, width: 50, height: 100 },
+            { x: 400, y: 0, width: 50, height: 300 },
+            { x: 0, y: 0, width: 450, height: 50},
+    
+        ],[
+            { x: 0, y:50, width: 700, height: 50 },
+            { x: 100, y:170, width: 700, height: 50 },
+            { x: 0, y:290, width: 700, height: 50 },
+            { x: 100, y:410, width: 700, height: 50 },
+        ],[
+            { x: 437,y:234, width: 111, height: 77 },
+            { x: 222,y:134, width: 111, height: 77 },
+            { x: 111,y:334, width: 111, height: 77 },
+            { x: 555,y:434, width: 111, height: 77 },
+            { x: 600,y:134, width: 111, height: 77 },
+            { x: 245,y:323, width: 111, height: 77 },
+            { x: 333,y:434, width: 111, height: 77 },
+            { x: 0, y: 0, width: 50, height: 800},
+            { x: 750, y: 0, width: 50, height: 800},
+            { x: 0, y: 0, width: 200, height: 200},
+            { x: 600, y: 400, width: 200, height: 200}
+        ],[
+            { x: 0,y:50, width: 695, height: 50 },
+            { x: 55,y:150, width: 45, height: 400 },
+            { x: 700,y:150, width: 50, height: 400 },
+            { x: 55,y:450, width: 695, height: 50 },
+            { x: 200,y:250, width: 400, height: 50 },
+            { x: 200,y:350, width: 400, height: 50 },
+            { x: 0, y: 0, width: 5, height: 800},
+            { x: 795, y: 0, width: 5, height: 800},
+            { x: 375, y: 0, width: 50, height: 200}
+        ],[
+            { x: 0,y:50, width: 700, height: 50 },
+            { x: 150,y:450, width: 800, height: 50 },
+            { x: 0,y:150, width: 50, height: 350 },
+            { x: 750,y:150, width: 50, height: 350 },
+            { x: 200,y:150, width: 400, height: 50 },
+            { x: 200,y:400, width: 400, height: 50 },
+            { x: 350,y:230, width: 100, height: 100 },
+            { x: 0, y: 0, width: 5, height: 800},
+            { x: 795, y: 0, width: 5, height: 800}
+        ],[
+            { type: 'hammer', x: 350, y: 250, width: 100, height: 100 },
+            { x: 0,y:0, width: 800, height: 5 },
+            { x: 0,y:595, width: 800, height: 5 },
+            { x: 0,y:0, width: 5, height: 600 },
+            { x: 795,y:0, width: 5, height: 600 },
+            { x: 100,y:100, width: 600, height: 50 },
+            { x: 100,y:450, width: 600, height: 50 },
+            { x: 100,y:200, width: 50, height: 50 },
+            { x: 650,y:200, width: 50, height: 50 },
+            { x: 100,y:300, width: 50, height: 50 },
+            { x: 650,y:300, width: 50, height: 50 },
+            { x: 100,y:400, width: 50, height: 50 },
+            { x: 650,y:400, width: 50, height: 50 }
+        ]
+        ];
+        let level = 0;
+
+        // Track which keys are currently pressed
+        const keys = {
+            ArrowUp: false,
+            ArrowDown: false,
+            ArrowLeft: false,
+            ArrowRight: false
+        };
+
+        // Event listeners for key presses
+        window.addEventListener('keydown', (e) => {
+            if (keys.hasOwnProperty(e.key)) {
+                keys[e.key] = true;
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            if (keys.hasOwnProperty(e.key)) {
+                keys[e.key] = false;
+            }
+        });
+
+        // Function to check collision between circle and rectangle
+        function checkCollision(circle, rect) {
+            let testX = circle.x;
+            let testY = circle.y;
+
+            if (circle.x < rect.x) testX = rect.x;
+            else if (circle.x > rect.x + rect.width) testX = rect.x + rect.width;
+
+            if (circle.y < rect.y) testY = rect.y;
+            else if (circle.y > rect.y + rect.height) testY = rect.y + rect.height;
+
+            const distX = circle.x - testX;
+            const distY = circle.y - testY;
+            const distance = Math.sqrt((distX * distX) + (distY * distY));
+
+            return distance <= circle.radius;
+        }
+
+        // Function to reset player position
+        function resetPlayer() {
+            deathAudio.play();
+            player.x = canvas.width / 2;
+            player.y = canvas.height -50;
+            player.dx = 0;
+            player.dy = 0;
+        }
+
+        // Function to update player movement with acceleration and friction
+        function updatePlayerMovement() {
+            // Apply acceleration based on key presses
+            if (keys.ArrowLeft) player.dx -= ACCELERATION;
+            if (keys.ArrowRight) player.dx += ACCELERATION;
+            if (keys.ArrowUp) player.dy -= ACCELERATION;
+            if (keys.ArrowDown) player.dy += ACCELERATION;
+
+            // Apply friction
+            player.dx *= FRICTION;
+            player.dy *= FRICTION;
+
+            // Limit speed
+            const speed = Math.sqrt(player.dx * player.dx + player.dy * player.dy);
+            if (speed > MAX_SPEED) {
+                const ratio = MAX_SPEED / speed;
+                player.dx *= ratio;
+                player.dy *= ratio;
+            }
+
+            // Update position
+            player.x += player.dx;
+            player.y += player.dy;
+
+            // Bounce off canvas bounds using restitution instead of stopping
+            if (player.x < player.radius) { // Left edge
+                player.x = player.radius;
+                if (player.dx < 0) player.dx = -player.dx * RESTITUTION;
+            }
+            if (player.x > canvas.width - player.radius) {
+                player.x = canvas.width - player.radius;
+                if (player.dx > 0) player.dx = -player.dx * RESTITUTION;
+            }
+            if (player.y < player.radius) { // Top edge
+                level++;
+                winAudio.play();
+                resetPlayer();
+            }
+            if (player.y > canvas.height - player.radius) {
+                player.y = canvas.height - player.radius;
+                if (player.dy > 0) player.dy = -player.dy * RESTITUTION;
+            }
+
+            // Clamp very small velocities to zero to avoid jitter after bounce
+            if (Math.abs(player.dx) < 0.01) player.dx = 0;
+            if (Math.abs(player.dy) < 0.01) player.dy = 0;
+        }
+        function drawPlayerImage() {
+            const img = playerImg;
+            const w = player.radius*2, h = player.radius*2;
+            // compute angle only if we have speed
+            const angle = Math.atan2(player.dy, player.dx);
+            ctx.save();
+            ctx.translate(player.x, player.y);
+            // optional: only rotate when moving to avoid weird orientation when stopped
+            if (player.dx !== 0 || player.dy !== 0) ctx.rotate(angle + Math.PI/2); // adjust offset depending on image orientation
+            if (img && img.complete && img.naturalWidth !== 0) {
+                ctx.drawImage(img, -w/2, -h/2, w, h);
+            } else {
+                ctx.beginPath();
+                ctx.arc(0, 0, player.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'blue';
+                ctx.fill();
+                ctx.closePath();
+            }
+            ctx.restore();
+            }
+        // Game loop
+        function gameLoop() {
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the green background
+        
+            ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+
+            // Update player movement
+            updatePlayerMovement();
+
+            // Draw obstacles
+            ctx.strokeStyle = 'red';
+            ctx.strokeWidth = 4;
+            levels[level].forEach(obstacle => {
+                if(obstacle.type === 'hammer'){
+                    ctx.drawImage(hammerImg, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                } else {
+                    ctx.drawImage(wallImg, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                    ctx.beginPath();
+                    ctx.rect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+                    ctx.stroke();
+                }
+            });
+
+            // Check for collisions
+            let gameStop = false;
+            for (let obstacle of levels[level]) {
+                if (checkCollision(player, obstacle)) {
+                    if(obstacle.type === 'hammer'){
+                        victoryAudio.play();
+                        bgLoop.pause();
+                        gameStop = true;
+                        setTimeout(() => {
+                            window.location.href = 'breakIt.html';
+                        }, 2000);
+                        break;
+                    }
+                    resetPlayer();
+                    break;
+                }
+            }
+
+            // Draw player
+            drawPlayerImage();
+
+            // Continue the game loop
+            if(!gameStop)requestAnimationFrame(gameLoop);
+        }
+
+        // Start the game
+        gameLoop();
+    </script>
+</body>
+</html>
