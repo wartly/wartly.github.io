@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Top Down Game - Smooth Movement</title>
+    <title>ICE DASH</title>
     <style>
         canvas {
             border: 1px solid black;
@@ -36,28 +36,22 @@
         hammerImg.src = 'hammer.png';
         const playerImg = new Image();
         playerImg.src = 'kwalla.png';
-        // Get the canvas and context
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-
-        // Movement configuration - feel free to adjust these values
-        const ACCELERATION = 0.5;  // How quickly the player speeds up
-        const FRICTION = 0.99;     // How quickly the player slows down (0-1)
-        const MAX_SPEED = 5;       // Maximum speed the player can move
-    // Restitution used when bouncing off canvas edges (1 = perfect, 0 = no bounce)
+        const ACCELERATION = 0.5;
+        const FRICTION = 0.99;
+        const MAX_SPEED = 5;
     const RESTITUTION = 0.8;
 
-        // Player properties
         const player = {
             x: canvas.width / 2,
             y: canvas.height  -50,
             radius: 20,
-            dx: 0,        // Horizontal velocity
-            dy: 0,        // Vertical velocity
+            dx: 0,        
+            dy: 0,        
             speed: 5
         };
 
-        // Define obstacles (red rectangles)
         const levels = [[
             { x: 100, y: 100, width: 50, height: 200 },
             { x: 300, y: 400, width: 200, height: 50 },
@@ -145,7 +139,6 @@
         ];
         let level = 0;
 
-        // Track which keys are currently pressed
         const keys = {
             ArrowUp: false,
             ArrowDown: false,
@@ -153,7 +146,6 @@
             ArrowRight: false
         };
 
-        // Event listeners for key presses
         window.addEventListener('keydown', (e) => {
             if (keys.hasOwnProperty(e.key)) {
                 keys[e.key] = true;
@@ -166,7 +158,6 @@
             }
         });
 
-        // Function to check collision between circle and rectangle
         function checkCollision(circle, rect) {
             let testX = circle.x;
             let testY = circle.y;
@@ -184,7 +175,6 @@
             return distance <= circle.radius;
         }
 
-        // Function to reset player position
         function resetPlayer() {
             deathAudio.play();
             player.x = canvas.width / 2;
@@ -193,19 +183,15 @@
             player.dy = 0;
         }
 
-        // Function to update player movement with acceleration and friction
         function updatePlayerMovement() {
-            // Apply acceleration based on key presses
             if (keys.ArrowLeft) player.dx -= ACCELERATION;
             if (keys.ArrowRight) player.dx += ACCELERATION;
             if (keys.ArrowUp) player.dy -= ACCELERATION;
             if (keys.ArrowDown) player.dy += ACCELERATION;
 
-            // Apply friction
             player.dx *= FRICTION;
             player.dy *= FRICTION;
 
-            // Limit speed
             const speed = Math.sqrt(player.dx * player.dx + player.dy * player.dy);
             if (speed > MAX_SPEED) {
                 const ratio = MAX_SPEED / speed;
@@ -213,12 +199,10 @@
                 player.dy *= ratio;
             }
 
-            // Update position
             player.x += player.dx;
             player.y += player.dy;
 
-            // Bounce off canvas bounds using restitution instead of stopping
-            if (player.x < player.radius) { // Left edge
+            if (player.x < player.radius) { 
                 player.x = player.radius;
                 if (player.dx < 0) player.dx = -player.dx * RESTITUTION;
             }
@@ -226,7 +210,7 @@
                 player.x = canvas.width - player.radius;
                 if (player.dx > 0) player.dx = -player.dx * RESTITUTION;
             }
-            if (player.y < player.radius) { // Top edge
+            if (player.y < player.radius) { 
                 level++;
                 winAudio.play();
                 resetPlayer();
@@ -236,19 +220,16 @@
                 if (player.dy > 0) player.dy = -player.dy * RESTITUTION;
             }
 
-            // Clamp very small velocities to zero to avoid jitter after bounce
             if (Math.abs(player.dx) < 0.01) player.dx = 0;
             if (Math.abs(player.dy) < 0.01) player.dy = 0;
         }
         function drawPlayerImage() {
             const img = playerImg;
             const w = player.radius*2, h = player.radius*2;
-            // compute angle only if we have speed
             const angle = Math.atan2(player.dy, player.dx);
             ctx.save();
             ctx.translate(player.x, player.y);
-            // optional: only rotate when moving to avoid weird orientation when stopped
-            if (player.dx !== 0 || player.dy !== 0) ctx.rotate(angle + Math.PI/2); // adjust offset depending on image orientation
+            if (player.dx !== 0 || player.dy !== 0) ctx.rotate(angle + Math.PI/2); 
             if (img && img.complete && img.naturalWidth !== 0) {
                 ctx.drawImage(img, -w/2, -h/2, w, h);
             } else {
@@ -260,19 +241,14 @@
             }
             ctx.restore();
             }
-        // Game loop
         function gameLoop() {
-            // Clear the canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Draw the green background
         
             ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
 
-            // Update player movement
             updatePlayerMovement();
 
-            // Draw obstacles
             ctx.strokeStyle = 'red';
             ctx.strokeWidth = 4;
             levels[level].forEach(obstacle => {
@@ -286,7 +262,6 @@
                 }
             });
 
-            // Check for collisions
             let gameStop = false;
             for (let obstacle of levels[level]) {
                 if (checkCollision(player, obstacle)) {
@@ -304,15 +279,13 @@
                 }
             }
 
-            // Draw player
             drawPlayerImage();
 
-            // Continue the game loop
             if(!gameStop)requestAnimationFrame(gameLoop);
         }
 
-        // Start the game
         gameLoop();
     </script>
 </body>
+
 </html>
