@@ -1,0 +1,18 @@
+<style>
+  html{
+    background:darkgrey;
+    color:yellow;
+    font-family:sans-serif;
+  }
+</style>
+<h1>Welcome to Strategic Paper Co</h1>
+<p>Here you can buy paper.</p>
+<button>Buy paper</button>
+<p><span id="count">0</span> Paper Ordered</p>
+<script>
+  let count = 0;
+  document.querySelector('button').addEventListener('click',()=>{
+    count++;
+    document.querySelector('#count').textContent=count;
+  });
+</script>
