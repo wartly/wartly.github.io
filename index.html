@@ -34,6 +34,9 @@ img.explode {
         transform:rotate(360deg);
     }
 }
+.clickable:hover{
+    cursor:pointer;
+}
 </style>
 <a href="/loot"><div class="llama"></div></a>
 <h1>Wartly</h1>
@@ -60,10 +63,27 @@ img.explode {
         }
       });
       document.body.appendChild(bomb);
+      const footnote = document.querySelector('.footnote');
+      footnote.classList.add('clickable');
+      footnote.addEventListener('click',()=>{
+          if(localStorage.getItem('cess')=='true'){
+              localStorage.setItem('nocopy','true');
+              document.body.removeChild(footnote);
+                      document.body.removeChild(bomb);
+        localStorage.setItem('hasbomb','false');
+            
+              setTimeout(()=>{document.body.classList.add('shaking');},1000);
+          }else{
+              alert('llama: Hey!');
+              alert('llama: Are you trying to remove the copyright attribution??');
+              alert('llama: not cool bro... 😡');
+          }
+      });
       document.querySelector('.llama').addEventListener('click',(e)=>{
         e.preventDefault();
         e.stopPropagation();
         localStorage.setItem('hasbomb','false');
+        localStorage.setItem('cess','true');
         document.body.removeChild(bomb);
         document.body.removeChild(document.querySelector('.llama').parentElement);
         const overlay = document.createElement('img');
@@ -75,6 +95,17 @@ img.explode {
       });
     }
   }
+  if('cess' in localStorage){
+    if(localStorage.getItem('cess')=='true'){
+        document.body.removeChild(document.querySelector('.llama').parentElement);
+      const overlay = document.createElement('img');
+        overlay.classList.add('overlay');
+        overlay.setAttribute('src','blackhole.png');
+        document.body.appendChild(overlay);
+        overlay.addEventListener('click',()=>{window.location.href='/theRealLoot'});
+    }
+  }
+  
 </script>
   </body>
 </html>
