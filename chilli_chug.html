@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Chilli Chug Splash</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-color: #e0f7fa;
+        color: #006064;
+        padding: 50px;
+    }
+    h1 {
+        font-size: 50px;
+        margin-bottom: 10px;
+    }
+    h3 {
+        font-size: 2em;
+        margin-bottom: 20px;
+    }
+    p {
+        font-size: 1.2em;
+        margin-bottom: 30px;
+    }
+    a {
+        display: inline-block;
+        padding: 15px 25px;
+        font-size: 1.2em;
+        color: #ffffff;
+        background-color: #00796b;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+    a:hover {
+        background-color: #004d40;
+    }
+    img{
+        width: 400px;
+    }
+</style>
+<body>
+    <h1>You have recieved Icy Feet</h1>
+    <h3>But wait...</h3>
+    <p><strong>It appears there is a small note across this gap...</strong></p>
+    <p>You will need chilli chug splash to cross it. Luckily you have some!</p>
+    <img src="gap.png" alt="Frozen Note Image">
+    <p>Want to find out what it says?</p>
+    <a href="#hidden" id="button">Splash some of that chilli chug on you</a>
+    <div id="hidden" style="display:none; margin-top:30px;">
+        <h3>Oh no...</h3>
+        <p>It is empty...</p>
+        <a href="chilli_dash.html">You will have to collect chillis to make your own!</a>
+    </div>
+    <script>
+        document.getElementById('button').addEventListener('click', function(event) {
+            event.preventDefault();
+            document.getElementById('hidden').style.display = 'block';     
+            document.querySelector('#hidden').scrollIntoView({ behavior: 'smooth' });   
+        });
+    </script>
+</body>
+</html>

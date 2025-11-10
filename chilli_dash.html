@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CHILLI DASH</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chilli Dash 🌶️</h1>
+    <p>You have <span id="timeLeft">60</span> seconds to collect <span id="chillis">100</span> chillis. Move to begin.</p>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <script>
+        const deathAudio = new Audio('death.wav');
+        deathAudio.volume = 1;
+        const winAudio = new Audio('level_complete.wav');
+        const bgLoop = new Audio('likethat.mp3');
+        bgLoop.loop = true;
+        function playLoop() {
+            bgLoop.play();
+            document.removeEventListener('click', playLoop);
+            document.removeEventListener('keydown', playLoop);
+        }
+        function beginGame() {
+            begun = true;
+            int =setInterval(() => {
+                time_left--;
+                if(time_left <= 0){
+                    resetPlayer();
+                }
+                document.getElementById('timeLeft').textContent = time_left;
+            }, 1000);
+            document.removeEventListener('keydown', beginGame);
+        }
+        document.addEventListener('click', playLoop);
+        document.addEventListener('keydown', playLoop);
+        document.addEventListener('keydown', beginGame);
+        const bgImg = new Image();
+        bgImg.src = 'grass.jpe';
+        const wallImg = new Image();
+        wallImg.src = 'chilli.png';
+        
+        const playerImg = new Image();
+        playerImg.src = 'kwalla.png';
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+let int;
+        const ACCELERATION = 1;  
+        const FRICTION = 0.8;     
+        const MAX_SPEED = 5;      
+    const RESTITUTION = 0.1;
+
+        const player = {
+            x: canvas.width / 2,
+            y: canvas.height  -50,
+            radius: 20,
+            dx: 0,        
+            dy: 0,        
+            speed: 5
+        };
+
+        let obstacle = [];
+        let time_left = 60;
+        let chillis = 100;
+        let begun = false;
+        const keys = {
+            ArrowUp: false,
+            ArrowDown: false,
+            ArrowLeft: false,
+            ArrowRight: false
+        };
+
+        window.addEventListener('keydown', (e) => {
+            if (keys.hasOwnProperty(e.key)) {
+                keys[e.key] = true;
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            if (keys.hasOwnProperty(e.key)) {
+                keys[e.key] = false;
+            }
+        });
+
+        function checkCollision(circle, rect) {
+            let testX = circle.x;
+            let testY = circle.y;
+
+            if (circle.x < rect.x) testX = rect.x;
+            else if (circle.x > rect.x + rect.width) testX = rect.x + rect.width;
+
+            if (circle.y < rect.y) testY = rect.y;
+            else if (circle.y > rect.y + rect.height) testY = rect.y + rect.height;
+
+            const distX = circle.x - testX;
+            const distY = circle.y - testY;
+            const distance = Math.sqrt((distX * distX) + (distY * distY));
+
+            return distance <= circle.radius;
+        }
+
+        function resetPlayer() {
+            chillis=100;
+            begun = false;
+            obstacle = [];
+            time_left=60;
+            document.getElementById('timeLeft').textContent = time_left;
+            document.getElementById('chillis').textContent = chillis;
+            clearInterval(int);
+            document.addEventListener('keydown', beginGame);
+            deathAudio.play();
+            player.x = canvas.width / 2;
+            player.y = canvas.height -50;
+            player.dx = 0;
+            player.dy = 0;
+        }
+
+        function updatePlayerMovement() {
+            if (keys.ArrowLeft) player.dx -= ACCELERATION;
+            if (keys.ArrowRight) player.dx += ACCELERATION;
+            if (keys.ArrowUp) player.dy -= ACCELERATION;
+            if (keys.ArrowDown) player.dy += ACCELERATION;
+
+            player.dx *= FRICTION;
+            player.dy *= FRICTION;
+
+            const speed = Math.sqrt(player.dx * player.dx + player.dy * player.dy);
+            if (speed > MAX_SPEED) {
+                const ratio = MAX_SPEED / speed;
+                player.dx *= ratio;
+                player.dy *= ratio;
+            }
+
+            player.x += player.dx;
+            player.y += player.dy;
+
+            if (player.x < player.radius) { // Left edge
+                player.x = player.radius;
+                if (player.dx < 0) player.dx = -player.dx * RESTITUTION;
+            }
+            if (player.x > canvas.width - player.radius) {
+                player.x = canvas.width - player.radius;
+                if (player.dx > 0) player.dx = -player.dx * RESTITUTION;
+            }
+            if (player.y < player.radius) { // Top edge
+                player.y = player.radius;
+                if (player.dy < 0) player.dy = -player.dy * RESTITUTION;
+            }
+            if (player.y > canvas.height - player.radius) {
+                player.y = canvas.height - player.radius;
+                if (player.dy > 0) player.dy = -player.dy * RESTITUTION;
+            }
+
+            if (Math.abs(player.dx) < 0.01) player.dx = 0;
+            if (Math.abs(player.dy) < 0.01) player.dy = 0;
+        }
+        function drawPlayerImage() {
+            const img = playerImg;
+            const w = player.radius*2, h = player.radius*2;
+            const angle = Math.atan2(player.dy, player.dx);
+            ctx.save();
+            ctx.translate(player.x, player.y);
+            if (player.dx !== 0 || player.dy !== 0) ctx.rotate(angle + Math.PI/2); // adjust offset depending on image orientation
+            if (img && img.complete && img.naturalWidth !== 0) {
+                ctx.drawImage(img, -w/2, -h/2, w, h);
+            } else {
+                ctx.beginPath();
+                ctx.arc(0, 0, player.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'blue';
+                ctx.fill();
+                ctx.closePath();
+            }
+            ctx.restore();
+            }
+        let gameStop = false;
+        function gameLoop() {
+            if(begun){
+                if(Math.random() > 0.97){obstacle.push({ x: Math.floor(Math.random() * (canvas.width-50)), y: Math.floor(Math.random() * (canvas.height-50)), width: 50, height: 50 });}
+            }
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        
+            ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+
+            updatePlayerMovement();
+
+            ctx.strokeStyle = 'red';
+            ctx.strokeWidth = 4;
+            obstacle.forEach(obstacle => {
+                ctx.drawImage(wallImg, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+            });
+
+            
+            let obi=0;
+            for (let ob of obstacle) {
+
+                if (checkCollision(player, ob)) {
+                    chillis--;
+                    if(chillis <= 0){ gameStop = true;
+                        winAudio.play();
+                        bgLoop.pause();
+                        clearInterval(int);
+                        setTimeout(() => {
+                            window.location.href = 'makeTheSplash.html';
+                        }, 2000);
+                    }
+
+                    document.getElementById("chillis").innerHTML = chillis;
+                    obstacle.splice(obi, 1);
+                    obi--;
+                    break;
+                }
+                obi++;
+            }
+
+            drawPlayerImage();
+
+            if(!gameStop)requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop();
+    </script>
+</body>
+</html>
