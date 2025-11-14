@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Endless Giraffe</title>
+    <style>
+        body, #giraffe, #added, #start {
+            background-color: white;
+            margin: 0;
+            color: black;
+            font-family: monospace;
+            font-size: 15px;
+            font-weight: bold;
+
+        }
+        body{
+            padding: auto;
+            overflow: hidden;
+            overflow-y: scroll;
+        }
+
+        #giraffe {
+            width: 40%;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="giraffe">
+        <pre id="start">
+            
+
+                    oo _,        ,
+                  _((-'_/       |
+                 /      "",   _//__,     __/
+               ,',O`  | #  ",/.---'     /,-'
+             ,'    __/-.   # "       \.//
+        |`._(;_,--'     \     "       ||
+         `-.\           ,\ #   ",     ||
+           _\\         || \   #  "    ||
+         /,-.`\       //   \      "  //
+        //   `.`.    ||   | \ #  # ",/
+        |      `.`._// \ //  \     # ",
+                 `-.:\  ||    \  #     ",
+      \`.___     // \:\ \\     \  #  #   ",
+    ,--'----.\  ||   \:\ ||   //\         #",
+             \\//    | | ||  //  \#    #     ",_
+              |:|    |:|  \\//    \  #    #     `--.__
+             /:/     |:|   \\      \     #    #     # `--._
+            / /      | |    ||     |#      #          #    `-.
+    \-     /:/    /| | |    ||     ;   #       #   #        # \
+     \\__ |:|   _//  |:|    ||    :     #   #       #   #      \
+      `-.\| |  /,-   |:|   //     :  #    #      #     #  /  #  :
+         \ :| //     |:|  //_     : # |  #               /    # |\
+          \:|//      \ \_/ / \\   :   :        |#     # | #     |\\
+          |: /    /|  \ ::/   `    \ # \   #   |  #     |      #| \\
+          / / \_ //   | : |         \  #\#  #  |       ,|  #    | ||
+         | |    ||   / ::/           |   \     |# __,.' \    #  | ||
+         |:|     \\ /:: /            | #/ |#  /-'' `. #  \     #; ||
+          \:\     \\:::/             |  | |  |       \  # \ #  /  ||
+          | |     / ::/              |  | | #|        |  | |  /   ||
+          | |     | : |              |# | |  |        |  | |# |   ;; 
+          |:|    / ::/               |  | | #|        |# | |  |  .;;.
+           \:\   |:::|               |  | |  |        |  | | #|  ;;;;
+           |:|  /:: /                | #| |  |        | #| |  |  ;;;;
+           |:| / : /                 |  | |# |        (  ) (  )  ;;;;
+           | |\|   |                 (  ) (  )        | /  | /   
+           | :\|:: |                  \ |  \ |        | |  | |
+            \ :| : |                  | |  | |        | |  | |
+            |      |                  | |  | |        | |  | |
+            |      |                  | |  | |        | |  | |</pre>
+        <pre id="added">            |      |                  | |  | |        | |  | |
+            |      |                  | |  | |        | |  | |
+            |      |                  | |  | |        | |  | |
+            |      |                  | |  | |        | |  | |
+            |      |                  | |  | |        | |  | |
+            |      |                  | |  | |        | |  | |</pre>
+    </div>
+    <script>
+        
+        document.addEventListener("scroll", function() {
+            var a = document.createElement("pre")
+            a.id="added"
+            a.innerHTML=`            |      |                  | |  | |        | |  | |
+            |      |                  | |  | |        | |  | |
+            |      |                  | |  | |        | |  | |
+            |      |                  | |  | |        | |  | |
+            |      |                  | |  | |        | |  | |
+            |      |                  | |  | |        | |  | |`
+            document.getElementById("giraffe").appendChild(a)
+        })
+    </script>
+</body>
+</html>
