@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Scroll The Height Of Mount Everest! ⛰️</title>
     <style>
         body{
@@ -28,7 +29,7 @@
     </style>
 </head>
 <body>
-    <div style="height:884900cm; background-image: url('static/img/sky.png'); padding: 10px;">
+    <div style="height:884900cm; background-image: url('../static/img/sky.png'); padding: 10px;">
         <div style="background-color: rgba(0,0,0,0.5); padding: 10px; width: fit-content; border-radius: 20px; margin-left: auto; margin-right: auto;">
         <h1>Scroll the height of mount everest!</h1>
         <p>Ever wanted to climb mount everest without actually going there?
@@ -58,13 +59,20 @@
             <br>
             Attach image:
             <input type="file">
+            <br>
+            <br>
+            Alternatively, you can <a href="?b=true#bottom">start at the bottom and climb up</a>
         </p>
         </div><div class="percent"><p class="number" id="number">0% - 0m</p></div>
         <script>
+            const urlParams = new URLSearchParams(window.location.search);
+            const b = urlParams.get('b');
             window.addEventListener("scroll", myFunction);
 
             function myFunction() {
+                
                 var scrollpercent = (document.body.scrollTop + document.documentElement.scrollTop) / (document.documentElement.scrollHeight - document.documentElement.clientHeight);
+                if(b){scrollpercent=1-scrollpercent;}
                 document.getElementById("number").innerHTML=(scrollpercent*100).toFixed(1)+"% - "+(scrollpercent*8849).toFixed(1)+"m";
             }
         </script>
