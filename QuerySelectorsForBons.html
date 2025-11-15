@@ -1,0 +1,106 @@
+<!--    QUERY SELECTORS FOR BONS    -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queries</title>
+    <style>
+        div{
+            width: 100%;
+            height: 30vh;
+            border: 1px solid black;
+        }
+        .happyfish{
+            background-color: rgb(209, 50, 50);
+        }
+        .shark{
+            background-color: rgb(33, 33, 33);
+        }
+        div p{
+            text-align: center;
+            font-size: 20pt;
+            font-weight: bold;
+            color: white;
+        }
+        .happyfish p{
+            color: rgb(0, 0, 0);
+        }
+        .shark p{
+            font-family: cursive;
+        }
+        .happyfish button{
+            background-color: rgb(0, 0, 0);
+            color: white;
+            font-weight: bold;
+        }
+        .shark button{
+            background-color: rgb(255, 255, 255);
+            color: rgb(0, 0, 0);
+            font-weight: bold;
+        }
+        .happyfish #words{
+            font-size: 20pt;
+        }
+        .shark #sharwords{
+            font-size: 15pt;
+        }
+        .happyfish #buttons{
+            width: 90%;
+            border-radius: 40px;
+            margin-left: 5%;
+            margin-right: 5%;
+            padding: 5px;
+            border: 1px solid cornflowerblue;
+            background-color: aliceblue;
+        }
+        .shark #buttons{
+            width: 90%;
+            border-radius: 40px;
+            margin-left: 5%;
+            margin-right: 5%;
+            padding: 5px;
+            border: 1px solid rgb(20, 49, 104);
+            background-color: rgb(126, 205, 147);
+        }
+        .happyfish .btn{
+            width: 30%;
+            margin: 1%;
+            border-radius: 20px;
+            background-color: rgb(0, 0, 0);
+            color: white;
+            font-weight: bold;
+        }
+        .shark .shark_btn{
+            width: 45%;
+            margin: 1%;
+            border-radius: 20px;
+            background-color: rgb(255, 255, 255);
+            color: rgb(0, 0, 0);
+            font-weight: bold;
+        }
+        body div div button{
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="happyfish">
+        <p id="words">I am a happy fish</p>
+        <div id="buttons">
+            <button class="btn">graze me</button>
+            <button class="btn">eat me</button>
+            <button class="btn">feed me</button>
+        </div>
+        <p>hueah!!!</p>
+    </div>
+    <div class="shark">
+        <p id="sharwords" class="words"> I am a shark</p>
+        <div id="buttons">
+            <button class="shark_btn">Eat fish</button>
+            <button class="shark_btn">Eat me</button>
+        </div>
+        <p>hueah!!!</p>
+    </div>
+</body>
+</html>
