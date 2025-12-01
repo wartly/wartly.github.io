@@ -41,6 +41,9 @@ img.explode {
     height: 100vh;
     width: 100vw;
 }
+html{
+  overflow:hidden;
+}
 
 body.shaking {transform: translate(var(--x), var(--y));animation: shake 0.5s linear infinite;}
 @property --x {
@@ -78,6 +81,7 @@ body.shaking {transform: translate(var(--x), var(--y));animation: shake 0.5s lin
 <a href="/home"><img src="kwalla.png" class="kwalla"></a>
 <p class="footnote">Background Image &copy; Copyright Fortnite</p>
 <script>
+  const footnote = document.querySelector('.footnote');
   if('hasbomb' in localStorage){
     if(localStorage.getItem('hasbomb')=='true'){
       const bomb = document.createElement('div');
@@ -92,7 +96,7 @@ body.shaking {transform: translate(var(--x), var(--y));animation: shake 0.5s lin
         }
       });
       document.body.appendChild(bomb);
-      const footnote = document.querySelector('.footnote');
+      
       footnote.classList.add('clickable');
       footnote.addEventListener('click',()=>{
           if(localStorage.getItem('cess')=='true'){
