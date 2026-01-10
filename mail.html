@@ -1,0 +1,36 @@
+<style>
+  body{
+    text-align: center;
+    font-family: sans-serif !important;
+  }
+  h1{
+    font-weight:900;
+  }
+  details{
+    background-color:#ff00ff;
+  }
+  summary{
+    background-color:#00ff00;
+  }
+</style>
+<h1>JailMail</h1>
+<h2>A fast and efficient mailing service for people in jail.</h2>
+<h3>By wartly</h3>
+<br><br>
+<b>Your mailbox:</b>
+<details>
+  <summary>Click to open</summary>
+  <ul><li id="item"><span id="itemname">Empty</span><button id="collect" style="display:none;">Collect</button></li></ul>
+</details>
+<script>
+  window.onload=()=>{
+    if('paper_request' in localStorage){
+      if(parseInt(localStorage.get('paper_request'))<1)return;
+      document.querySelector("#itemname").textContent=localStorage.get('paper_request')+' sheet/s of Strategic Paper Co. paper';
+      document.querySelector("#collect").style.display="inline-block";
+      document.querySelector("#collect").addEventListener("click",()=>{
+        localStorage.set('paper_request','0');
+      });
+    }
+  }
+</script>
