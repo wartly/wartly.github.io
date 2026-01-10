@@ -35,10 +35,10 @@
     if(ammo>0){
       xp+=10;
       ammo--;
-      if(Math.random()>0.82){
+      if(Math.random()>0.8){
         xp+= 200;
         elims++;
-        ammo+=Math.floor(Math.random()*2);
+        ammo+=Math.floor(Math.random()*5);
         kits+=Math.floor(Math.random()*1.09);
         if(Math.random()>0.9){
           xp+= 500;
@@ -64,7 +64,7 @@
     document.querySelector("#health").textContent=health;
   });
   document.querySelector("#loot").addEventListener("click",()=>{
-    ammo+= Math.floor(Math.random()*10);
+    ammo+= Math.floor(Math.random()*17);
     kits+= Math.floor(Math.random()*1.5);
     xp+= 50;
     document.querySelector("#ammo").textContent=ammo;
