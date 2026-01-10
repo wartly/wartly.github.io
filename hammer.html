@@ -9,7 +9,7 @@
     <div id="allpagecontent">
         <h1>SHATTER THE ICE</h1>
         <p>Click on the screen to hammer.</p>
-        <p>Hammer may take a moment to load...</p>
+        <p>Please what a few seconds for the hammer to load BEFORE clicking.</p>
         <br><br><br><br><br><br><br>
     </div>
 </body>
@@ -122,7 +122,6 @@
   <script src="https://unpkg.com/three@0.146.0/examples/js/loaders/GLTFLoader.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
-    // 1. Preload fracture images
 const fractureImages = [];
 for (let i = 1; i <= 4; i++) {
   const img = new Image();
@@ -130,7 +129,6 @@ for (let i = 1; i <= 4; i++) {
   fractureImages.push(img);
 }
 
-// 2. Create a 2D overlay canvas for fractures
 const fractureCanvas = document.createElement('canvas');
 fractureCanvas.id = 'fractureCanvas';
 fractureCanvas.width = window.innerWidth;
@@ -143,21 +141,17 @@ fractureCanvas.style.zIndex = '1000'; // Ensure it's on top
 document.body.appendChild(fractureCanvas);
 const fractureCtx = fractureCanvas.getContext('2d');
 
-// 3. Update overlay canvas size on resize
 window.addEventListener('resize', () => {
   fractureCanvas.width = window.innerWidth;
   fractureCanvas.height = window.innerHeight;
 });
 
-// 4. Stamp fracture when hammering finishes
     const hammerLength = 0.12; // Length of the hammer head
 
 function stampFracture() {
-  // Get hammerhead position in world space
-  const hammerHeadLocal = new THREE.Vector3(0, hammerLength, 0); // adjust hammerLength if needed
+  const hammerHeadLocal = new THREE.Vector3(0, hammerLength, 0); 
   hammerHeadLocal.applyMatrix4(hammerGroup.matrixWorld);
 
-  // Project to screen coordinates
   const hammerHeadScreen = hammerHeadLocal.clone().project(camera);
   const x = ((hammerHeadScreen.x + 1) / 2) * fractureCanvas.width;
   const y = ((-hammerHeadScreen.y + 1) / 2) * fractureCanvas.height;
@@ -167,7 +161,7 @@ function stampFracture() {
   const angle = Math.random() * Math.PI * 2;
 
   // Draw with rotation
-  const size = 150; // adjust fracture image size as needed
+  const size = 150;
   fractureCtx.save();
   fractureCtx.translate(x, y);
   fractureCtx.rotate(angle);
@@ -196,7 +190,7 @@ scene.add(directionalLight);
 
     const loader = new THREE.GLTFLoader();
     let hammer, hammerGroup;
-    loader.load('https://jamied132.is-a.dev/elaruu/hammer2.glb', gltf => {
+    loader.load('/hammer2.glb', gltf => {
   hammer = gltf.scene;
   hammer.scale.set(0.003, 0.003, 0.003);
 
@@ -235,29 +229,22 @@ scene.add(directionalLight);
   requestAnimationFrame(animate);
 
   if (hammerGroup && hammer) {
-    // 1. Get base position in NDC (bottom center)
     const baseNDC = new THREE.Vector3(0, -1, 0);
     const baseWorld = baseNDC.clone().unproject(camera);
 
-    // 2. Get mouse position in NDC
     const mouseNDC = new THREE.Vector3(mouse.x, mouse.y, 0);
     const mouseWorld = mouseNDC.clone().unproject(camera);
 
-    // 3. Calculate direction and distance
     const direction = mouseWorld.clone().sub(baseWorld);
     direction.normalize();
 
-    // 4. Set hammerGroup position so the head reaches the cursor
     hammerGroup.position.copy(mouseWorld);
-    // Move the group back along its local Y axis by hammerLength
     hammerGroup.position.add(direction.clone().multiplyScalar(-hammerLength));
 
-    // 5. Rotate hammer to point at cursor
     const up = new THREE.Vector3(0, 1, 0); // local up
     const targetQuat = new THREE.Quaternion().setFromUnitVectors(up, direction);
     hammerGroup.quaternion.copy(targetQuat);
 
-    // Hammering animation (optional)
     if (isHammering) {
       hammerRotation -= 0.3;
       const hammerSwing = Math.sin(hammerRotation) * 0.6;
@@ -268,7 +255,7 @@ scene.add(directionalLight);
         hammerGroup.rotation.x = 0;
         stampFracture(); // Stamp fracture when hammering finishes
         numberOfClicks++;
-        if (numberOfClicks >=10){
+        if (numberOfClicks >=25){
             document.querySelector('.shatter-container').classList.add('shattered');
             document.querySelector('#fractureCanvas').style.display = 'none';
             document.querySelector('#hammerCanvas').style.display = 'none';
@@ -316,4 +303,5 @@ scene.add(directionalLight);
             document.querySelector('#allpagecontent').style.display = 'none';
         }
     });
+
   </script>
