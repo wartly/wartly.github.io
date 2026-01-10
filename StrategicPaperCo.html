@@ -12,7 +12,10 @@
 <script>
   let count =0;
   window.onload = () =>{
-    if('paper_requested' in localStorage){count=parseInt(localStorage.getItem('paper_requested'));}
+    if('paper_requested' in localStorage){
+      count=parseInt(localStorage.getItem('paper_requested'));
+      document.querySelector('#county').textContent=count;
+    }
   }
   document.querySelector('button').addEventListener('click',()=>{
     count++;
