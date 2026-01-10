@@ -17,14 +17,14 @@
 <button id="drop">Drop in a new match</button>
 <div class="hidden" id="game">
   <h2 id="gg"></h2>
-  <p>Ammo: <span id="ammo">100</span> Elims: <span id="elims">0</span> Health: <span id="health">100</span></p>
+  <p>Ammo: <span id="ammo">30</span> Elims: <span id="elims">0</span> Health: <span id="health">100</span></p>
   <button id="shoot">Shoot</button>
   <button id="loot" disabled>Loot up</button>
   <button id="kit">Use kit (<span id="kits">0</span>)</button>
   <p>XP: <span id="xp">0</span></p>
 </div>
 <script>
-  let ammo = 100,
+  let ammo = 30,
       elims = 0,
       kits = 0,
       xp = 0,
@@ -54,7 +54,7 @@
     if(Math.random()>0.9){
       document.querySelector("#loot").disabled=false;
     }
-    if(elims>99)gameOver("GG! Victory Royal!");
+    if(elims>98)gameOver("GG! Victory Royal!");
     if(ammo<0)ammo=0;
     if(health<0)gameOver("GG! You came " + (Math.floor(Math.random()*(99-elims))+1)+"th!");
     document.querySelector("#ammo").textContent=ammo;
