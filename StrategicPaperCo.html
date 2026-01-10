@@ -11,8 +11,8 @@
 <p><span id="count">0</span> Paper Ordered</p>
 <script>
   window.onload = () =>{
-    if('paper_requested' in localStorage)let count=parseInt(localStorage.get('paper_requested');
-    else let count=0;
+    if('paper_requested' in localStorage){let count=parseInt(localStorage.get('paper_requested');}
+    else {let count=0;}
   }
   document.querySelector('button').addEventListener('click',()=>{
     count++;
