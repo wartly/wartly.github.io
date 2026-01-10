@@ -20,7 +20,7 @@
   <p>Ammo: <span id="ammo">100</span> Elims: <span id="elims">0</span> Health: <span id="health">100</span></p>
   <button id="shoot">Shoot</button>
   <button id="loot" disabled>Loot up</button>
-  <button id="kit">Use kit <span id="kits">(0)</span></button>
+  <button id="kit">Use kit (<span id="kits">0</span>)</button>
   <p>XP: <span id="xp">0</span></p>
 </div>
 <script>
@@ -37,8 +37,8 @@
       if(Math.random()>0.9){
         xp+= 200;
         elims++;
-        ammo+=Math.floor(Math.random()*10);
-        kits+=Math.floor(Math.random()*1.08);
+        ammo+=Math.floor(Math.random()*2);
+        kits+=Math.floor(Math.random()*1.01);
         if(Math.random()>0.9){
           xp+= 500;
           ammo+=Math.floor(Math.random()*10);
@@ -46,7 +46,7 @@
         }
       }
     }
-    if(Math.random()>0.55){
+    if(Math.random()>0.4){
       xp+=1;
       health -= Math.floor(Math.random()*10);
     }
@@ -82,7 +82,7 @@
     document.querySelector("#loot").disabled=true;
     document.querySelector("#kit").disabled=true;
     document.querySelector("#shoot").disabled=true;
-    document.querySelector("#gg").textCotnent="GG!";
+    document.querySelector("#gg").textContent="GG!";
   }
   
 </script>
