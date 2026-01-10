@@ -8,15 +8,15 @@
 <h1>Welcome to Strategic Paper Co</h1>
 <p>Here you can buy paper.</p>
 <button>Buy paper</button>
-<p><span id="count">0</span> Paper Ordered</p>
+<p><span id="county">0</span> Paper Ordered</p>
 <script>
+  let count =0;
   window.onload = () =>{
-    if('paper_requested' in localStorage){let count=parseInt(localStorage.getItem('paper_requested'));}
-    else {let count=0;}
+    if('paper_requested' in localStorage){count=parseInt(localStorage.getItem('paper_requested'));}
   }
   document.querySelector('button').addEventListener('click',()=>{
     count++;
-    document.querySelector('#count').textContent=count;
+    document.querySelector('#county').textContent=count;
     localStorage.setItem('paper_requested',''+count);
   });
 </script>
