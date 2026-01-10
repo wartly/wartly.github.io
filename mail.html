@@ -43,11 +43,11 @@
 <script>
   window.onload=()=>{
     if('paper_request' in localStorage){
-      if(parseInt(localStorage.get('paper_request'))<1)return;
-      document.querySelector("#itemname").textContent=localStorage.get('paper_request')+' sheet/s of Strategic Paper Co. paper';
+      if(parseInt(localStorage.getItem('paper_request'))<1)return;
+      document.querySelector("#itemname").textContent=localStorage.getItem('paper_request')+' sheet/s of Strategic Paper Co. paper';
       document.querySelector("#collect").style.display="inline-block";
       document.querySelector("#collect").addEventListener("click",()=>{
-        localStorage.set('paper_request','0');
+        localStorage.setItem('paper_request','0');
       });
     }
   }
