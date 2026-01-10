@@ -10,9 +10,13 @@
 <button>Buy paper</button>
 <p><span id="count">0</span> Paper Ordered</p>
 <script>
-  let count = 0;
+  window.onload = () =>{
+    if('paper_requested' in localStorage)let count=parseInt(localStorage.get('paper_requested');
+    else let count=0;
+  }
   document.querySelector('button').addEventListener('click',()=>{
     count++;
     document.querySelector('#count').textContent=count;
+    localStorage.set('paper_requested',''+count);
   });
 </script>
