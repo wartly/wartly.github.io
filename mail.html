@@ -42,12 +42,12 @@
 </details>
 <script>
   window.onload=()=>{
-    if('paper_request' in localStorage){
-      if(parseInt(localStorage.getItem('paper_request'))<1)return;
-      document.querySelector("#itemname").textContent=localStorage.getItem('paper_request')+' sheet/s of Strategic Paper Co. paper';
+    if('paper_requested' in localStorage){
+      if(parseInt(localStorage.getItem('paper_requested'))<1)return;
+      document.querySelector("#itemname").textContent=localStorage.getItem('paper_requested')+' sheet/s of Strategic Paper Co. paper';
       document.querySelector("#collect").style.display="inline-block";
       document.querySelector("#collect").addEventListener("click",()=>{
-        localStorage.setItem('paper_request','0');
+        localStorage.setItem('paper_requested','0');
       });
     }
   }
