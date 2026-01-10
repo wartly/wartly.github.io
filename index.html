@@ -118,6 +118,8 @@ body.shaking {transform: translate(var(--x), var(--y));animation: shake 0.5s lin
         localStorage.setItem('hasbomb','false');
             localStorage.setItem('nocopy','true');
               setTimeout(()=>{document.body.classList.add('shaking');},1000);
+                  setTimeout(()=>{window.location.href="/banned";},3000);
+
           }else{
               alert('llama: Hey!');
               alert('llama: Are you trying to remove the copyright attribution??');
@@ -154,6 +156,7 @@ body.shaking {transform: translate(var(--x), var(--y));animation: shake 0.5s lin
     if(localStorage.getItem('nocopy')=='true'){
       document.body.classList.add('shaking');
       document.body.removeChild(footnote);
+      setTimeout(()=>{window.location.href="/banned";},1000);
     }
   }
   
