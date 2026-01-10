@@ -1,0 +1,88 @@
+<style>
+  body{
+    background: beige;
+  }
+  h1,h3,h2{
+    width:100%;
+    text-align: center;
+    font-family: sans-serif;
+    font-weight:900;
+  }
+  .hidden{
+    display:none;
+  }
+</style>
+<h1>FORTNITE!!!!</h1>
+<h3>LET'S GET SOME DROPS</h3>
+<button id="drop">Drop in a new match</button>
+<div class="hidden" id="game">
+  <h2 id="gg"></h2>
+  <p>Ammo: <span id="ammo">100</span> Elims: <span id="elims">0</span> Health: <span id="health">100</span></p>
+  <button id="shoot">Shoot</button>
+  <button id="loot" disabled>Loot up</button>
+  <button id="kit">Use kit <span id="kits">(0)</span></button>
+  <p>XP: <span id="xp">0</span></p>
+</div>
+<script>
+  let ammo = 100,
+      elims = 0,
+      kits = 0,
+      xp = 0,
+      health = 100;
+  document.querySelector("#drop").addEventListener('click',()=>{document.querySelector("#game").classList.remove('hidden')});
+  document.querySelector("#shoot").addEventListener('click',()=>{
+    if(ammo>0){
+      xp+=10;
+      ammo--;
+      if(Math.random()>0.9){
+        xp+= 200;
+        elims++;
+        ammo+=Math.floor(Math.random()*10);
+        kits+=Math.floor(Math.random()*1.08);
+        if(Math.random()>0.9){
+          xp+= 500;
+          ammo+=Math.floor(Math.random()*10);
+          kits+=Math.floor(Math.random()*1.08);
+        }
+      }
+    }
+    if(Math.random()>0.55){
+      xp+=1;
+      health -= Math.floot(Math.random()*10);
+    }
+    if(Math.random()>0.9){
+      document.querySelector("#loot").disabled=false;
+    }
+    if(ammo<0)ammo=0;
+    if(health<0)gameOver();
+    document.querySelector("#ammo").textContent=ammo;
+    document.querySelector("#elims").textContent=elims;
+    document.querySelector("#kits").textContent=kits;
+    document.querySelector("#xp").textContent=xp;
+    document.querySelector("#health").textContent=health;
+  });
+  document.querySelector("#loot").addEventListener("click",()=>{
+    ammo+= Math.floor(Math.random()*30);
+    kits+= Math.floor(Math.random()*1.5);
+    xp+= 50;
+    document.querySelector("#ammo").textContent=ammo;
+    document.querySelector("#kits").textContent=kits;
+    document.querySelector("#xp").textContent=xp;
+    document.querySelector("#loot").disabled=true;
+  });
+  document.querySelector("#kit").addEventListener("click",()=>{
+    health=100;
+    kits--;
+    xp+= 50;
+    document.querySelector("#health").textContent=health;
+    document.querySelector("#kits").textContent=kits;
+    document.querySelector("#xp").textContent=xp;
+  });
+  function gameOver(){
+    document.querySelector("#loot").disabled=true;
+    document.querySelector("#kit").disabled=true;
+    document.querySelector("#shoot").disabled=true;
+    document.querySelector("#gg").textCotnent="GG!";
+  }
+  
+</script>
