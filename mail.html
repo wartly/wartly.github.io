@@ -48,6 +48,8 @@
       document.querySelector("#collect").style.display="inline-block";
       document.querySelector("#collect").addEventListener("click",()=>{
         localStorage.setItem('paper_requested','0');
+        document.querySelector("#collect").style.display="none";
+        document.querySelector("#itemname").textContent="Empty";
       });
     }
   }
