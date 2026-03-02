@@ -23,13 +23,12 @@
 <a href="/seshing">Play some GD</a>
 <a href="/mail">Check your mail</a>
 <p>or...</p>
-<table>
-  <tbody>
-    <tr class="verytall"><td>
-      <canvas id="scene" width=400 height=400></canvas>
-    </td></tr>
-    <tr><th id="dialog"></th></tr>
-    <tr class="tall"><td id="actions">
+
+<div class="game">
+  <canvas id="scene" width=400 height=400></canvas>
+  <span class="dialog"></span>
+  <div class="row">
+    <div id="actions">
       <button id="give">Give</button>
       <button id="give">Pick up</button>
       <button id="give">Use</button>
@@ -39,8 +38,10 @@
       <button id="give">Close</button>
       <button id="give">Talk to</button>
       <button id="give">Pull</button>
-    </td><td id="inventory"></td></tr>
-    <tr><td id="sentence"></td></tr>
-  </tbody>
-</table>
+    </div>
+    <div id="inventory"></div>
+  </div>
+  <span id="sentence"></span>
+</div>
+
 <script></script>
